@@ -139,10 +139,69 @@ statistics port 8 1 32
             └─ НЕТ → mvlan/агрегация/upstream multicast
 ```
 
-**Короткое правило:** MAC → VLAN → V (pktfilter) → igmpsnoop group. Где первым «отвалилось» — там и причина. Если все четыре ок и трафик `tx` растёт — DSLAM чист, проблема у абонента (модем: bridge/VLAN/IGMP proxy; кабель; приставка).
-
 ---
 
-## Что делать по нашему порту 8 прямо сейчас
+# CDATA
 
-У нас уже проверено: MAC приставки в 1201 есть, PVID 1201, pktfilter чист (igmp=V, PPPoE-Only=D), mvlan 1200 порт F, igmpsnoop group есть, tx растёт, errors 0. **Все четыре шага «не работает» пройдены — DSLAM чист.** Значит для «не работает» дальше только абонент: модем (bridge IPTV-PVC, IGMP proxy), кабель модем–приставка, приставка. Для «артефактов» — профиль с `interleave=255,255` (без пересоздания PVC).
+**Всегда надо заходить в enable**
+
+Аптайм и инфо по шасси
+```
+show version
+```
+
+перезапустить порт:
+```
+config
+interface gpon 0/0
+ont reboot 4 13
+```
+
+Проверка сигнала на порту
+```
+config
+interface gpon 0/0
+show ont optical-info 2 1
+```
+
+Проверить мак адрес на порту
+```
+config
+show mac-address port pon 0/0/4 ont 13
+```
+
+Маки по vlan
+```
+show mac-address vlan 900
+```
+
+Все вланы:
+```
+show vlan all
+```
+
+Состояние линка от ONT к Роутеру/ПК
+```
+config
+interface gpon 0/0
+show ont port state 2 24 eth all
+```
+
+
+
+Проверка логов:
+```
+show log all
+show logging buffer
+```
+
+Арпы:
+```
+show arp all
+```
+
+
+Полная дока:
+```
+https://fibotelecom.ru/upload/iblock/acf/zwsh9i184rbpiv2e15xnwzjb1r1o6dh3.pdf
+```
