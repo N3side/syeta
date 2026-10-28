@@ -147,6 +147,12 @@ interface gpon 0/0
 ont reboot 4 13
 ```
 
+или
+```
+ont port attribute 2 24 eth 1 operational-state disable
+ont port attribute 2 24 eth 1 operational-state enable
+```
+
 Проверка сигнала на порту
 ```
 config
@@ -176,14 +182,6 @@ config
 interface gpon 0/0
 show ont port state 2 24 eth all
 ```
-
-или
-```
-ont port attribute 2 24 eth 1 operational-state disable
-ont port attribute 2 24 eth 1 operational-state enable
-```
-
-
 
 Проверка логов:
 ```
