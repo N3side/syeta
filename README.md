@@ -6,15 +6,10 @@
 - есть линк
 
 # ADSL
-
 Если артефакты/зависания, то сменить в профайле задержку на 255 255. pvc нет смысла пересоздавать
 
 
 ## Алгоритм «телевизор перестал работать» — подробно
-
-Отталкиваемся от вашей формулировки: **если просто не работает (нет картинки)** — смотрим **маки → влан → V (pktfilter) → igmpsnoop group**. Ниже — по шагам, что именно смотреть и как читать вывод.
-
----
 
 ## Шаг 1. MAC-адреса на порту — `statistics mac 8`
 
@@ -36,8 +31,7 @@ statistics mac 8
 1308  ec:4c:4d:e5:68:c2   ← модем TR-069
 2846  ec:4c:4d:e5:68:c1   ← модем PPPoE
 ```
-→ MAC приставки в 1201 есть → Шаг 2.
-
+MAC приставки в 1201 есть → Шаг 2.
 ---
 
 ## Шаг 2. VLAN / PVID — `switch vlan portshow 8`
@@ -65,7 +59,6 @@ statistics vlan
 statistics vlan 1201
 ```
 `F` — работает, `U`/`T`/`E` — не в работе. Если IPTV-VLAN не `F` — проблема выше (агрегация/upstream), не в порту.
-
 ---
 
 
@@ -124,15 +117,11 @@ statistics port 8 1 32
    │        ├─ НЕТ → сменить pvid на IPTV VLAN
    │        └─ ДА → Шаг 3
    │
-   ├─ switch pktfilter show 8 → igmp=V, PPPoE-Only=D?
-   │        ├─ НЕТ → switch pktfilter set 8 none
-   │        └─ ДА → Шаг 4
-   │
    ├─ statistics igmpsnoop port group 8 → группы есть?
    │        ├─ НЕТ → проверить mvlan (порт F?) → switch igmpsnoop mvlan show *
    │        │         └─ не F → switch igmpsnoop mvlan set <vid> 8:FU MULTICAST
    │        │         └─ F, а групп нет → приставка/модем (IGMP proxy, bridge) — к абоненту
-   │        └─ ДА → Шаг 5
+   │        └─ ДА → Шаг 4
    │
    └─ statistics port 8 1 32 (дважды) → tx растёт, errors 0?
             ├─ ДА → DSLAM ок → модем/кабель/приставка — к абоненту
