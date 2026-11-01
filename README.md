@@ -183,3 +183,10 @@ show arp all
 ```
 https://fibotelecom.ru/upload/iblock/acf/zwsh9i184rbpiv2e15xnwzjb1r1o6dh3.pdf
 ```
+
+
+# L3
+
+1. чек через vlan какой порт
+2. если маки с нашей стороны приходят то ок. Если нет то проблема на настройках коммута
+3. 
